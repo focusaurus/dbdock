@@ -1,9 +1,18 @@
 #!/bin/bash
 export DEBIAN_FRONTEND=noninteractive
+
 stop rpcbind
 apt-get remove rpcbind
+
+##### docker #####
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
+  --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+echo deb https://get.docker.io/ubuntu docker main \
+  > /etc/apt/sources.list.d/docker.list
+
 ##### mongodb #####
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
+  --recv 7F0CEB10
 echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' \
   > /etc/apt/sources.list.d/mongodb.list
 
@@ -14,17 +23,17 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
 apt-get --yes update
 apt-get --yes install \
   couchdb \
-  docker.io \
+  lxc-docker \
   mongodb-org \
   mysql-server \
   ntp \
   perl \
   postgresql \
   redis-server
-ln -sf /usr/bin/docker.io /usr/local/bin/docker
+
 echo 'DOCKER_OPTS="--ip 0.0.0.0 --host tcp://0.0.0.0:2375"' >> \
-  /etc/default/docker.io
-service docker.io restart
+  /etc/default/docker
+service docker restart
 
 perl -pi -e 's/127\.0\.0\.1/0.0.0.0/g' \
   /etc/mongod.conf \
