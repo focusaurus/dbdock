@@ -59,9 +59,10 @@ description "docker registry"
 start on filesystem and started docker
 stop on runlevel [!2345]
 respawn
+env DOCKER_HOST=tcp://127.0.0.1:2375
 exec /usr/bin/docker run -a stdout --rm --name=docker-registry \
   -v /var/local/docker-registry:/var/local/docker-registry \
-  -p 5000:5000 registry
+  -p 0.0.0.0:5000:5000 registry
 EOF
 initctl reload-configuration
 start docker-registry
