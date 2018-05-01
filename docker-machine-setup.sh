@@ -5,6 +5,7 @@ docker run \
   --name=mysql \
   --publish=3306:3306 \
   --env=MYSQL_ROOT_PASSWORD=password \
+  --volume=/Users/plyons/boot2docker-volume:/volume \
   mysql:5.5
 
 docker run \
@@ -31,3 +32,13 @@ docker run \
   --publish=5432:5432 \
   --env=POSTGRES_PASSWORD=password \
   postgres:9.4.1
+
+# need mongodb for carson
+docker run \
+  --detach \
+  --restart=always \
+  --name mongodb \
+  --publish=27017:27017 \
+  --env=MONGODB_PASS=password \
+  --volume=/Users/plyons/boot2docker-volume:/volume \
+  mongo:2.6.8
